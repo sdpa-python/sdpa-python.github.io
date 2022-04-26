@@ -1,0 +1,5 @@
+remote_theme           : "just-the-docs/just-the-docs"
+repository             : "just-the-docs/just-the-docs"
+title                  : "SDPA for Python"
+description            : "Python 3 Wrapper for SDPA (SemiDefinite Programming Algorithm)"
+color_scheme           : "celestite"
