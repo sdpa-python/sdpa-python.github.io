@@ -6,24 +6,28 @@ parent: Installation
 
 # Building SDPA for Python on Linux
 
-SDPA for Python (`sdpa-python`) is a wrapper on top of the SDPA package. We will go over installing SDPA first, followed by SDPA for Python.
+SDPA for Python (`sdpa-python`) is a wrapper on top of the SDPA package. We will go over building SDPA first, followed by SDPA for Python.
 
-## Otaining and installing SDPA
+## Obtaining and installing SDPA
 
-The primary software package containing SDPA is named simply `sdpa` and the source can be obtained from the [official website](http://sdpa.sourceforge.net/download.html).
+The primary software package containing SDPA is named simply `sdpa` and the source can be obtained from the [official website](http://sdpa.sourceforge.net/download.html). Sourceforge does not allow a direct download link, however, the specific file required is [sdpa_7.3.8.tar.gz](https://downloads.sourceforge.net/project/sdpa/sdpa/sdpa_7.3.8.tar.gz).
 
-SDPAP is a Python wrapper on top of SDPA and can also be obtained from the same link. SDPA can be built by itself or as a part of the SDPAP package, which would require you to link to the SDPA source in the config file as you install it.
+Once downloaded, unzip it using:
 
-To build SDPA (directly or through SDPAP), you need to have the basic build tools, i.e. `make` and `gcc`/`g++` on your computer. If you are using Linux, I assume you already have these tools, or know how to obtain them from your package manager.
+```bash
+tar -zxf sdpa_7.3.8.tar.gz
+```
+
+To build SDPA (with or without the Python wrapper), you need to have the basic build tools, i.e. `make` and `gcc`/`g++` on your computer. On Linux, please refer to the instructions for your package manager if you do not already have them.
 
 ### Additional Requirements
 
 Building SDPA also requires you to have
 
 1. A **BLAS/LAPACK library**.
-    On Linux, `libblas` and `liblapack` are provided by your distribution. Mostly Linux would use the OpenBLAS implementation, owing to it's permissive license. The best way to check if you have them installed is to compile a very basic Hello World program with `g++ hello.c -lblas -llapack`. If they aren't there, you can refer to instructions for installing them for your distribution.
+    On Linux, `libblas` and `liblapack` are provided by your distribution. The best way to check if you have them installed is to compile a very basic Hello World program with `g++ hello.c -lblas -llapack`. If they aren't there, you can refer to instructions for installing them for your distribution.
 
-    <!-- You may want to use some other BLAS/LAPACK implementation than the usual ones for your operating system. In that case, please read [this guide](#) to have an overview of contemporary BLAS/LAPACK implementations and which one to choose. -->
+    Mostly Linux would have two alternative packages, `libblas` and `libopenblas`. `libblas` is the [reference implementation](http://www.netlib.org/blas/) while `libopenblas` is the optimized [OpenBLAS](https://www.openblas.net/) implementation. OpenBLAS is recommended as it gives much better performance.
 
 2. A **FORTRAN compiler**.
     It will be required to build [MUMPS](http://mumps.enseeiht.fr) which is written in Fortran.
@@ -49,7 +53,7 @@ FCFLAGS="$FCFLAGS -Wall -fPIC -funroll-all-loops -fallow-argument-mismatch"
 
 You may want to modify the other flags for processor specific reasons, but we will not cover them in this post.
 
-### Configure (and test build)
+### Build
 
 The next step should be to run the configure script in the `sdpa` root directory. Assuming you have `sdpa` unzipped on your Desktop:
 
@@ -63,21 +67,39 @@ This should check whether all requirements are met for the build. Once done, iss
 make
 ```
 
+This will generate the `sdpa` binary as well as `libsdpa.a` static library. The `libsdpa.a` library is what the Python wrapper will link against.
+
 This will generate the `make.inc` file which `sdpa-python` would require you to link to.
 
 ### Test run the SDPA binary
 
-When the `make` completes, the `sdpa` binary will be in the same directory. You can test run it using one of the provided example files:
+Let's do a test run on the `sdpa` binary to make sure all is well until this point. While still within the `sdpa-7.3.8` folder, do
 
 ```bash
 ./sdpa example1.dat example1.out
 ```
 
-This should complete a test run the `sdpa` binary.
+This should complete a test run the `sdpa` binary using one of the provided example files. If you can see the solver output, and `pdOPT` as the status, the build was successful. We can now move onto building the Python wrapper.
 
-## Otaining and installing SDPA Python wrapper
+## Obtaining and installing SDPA Python wrapper
 
 Once you have built and done a test run on `sdpa`, you have a working SDPA binary, it's finally time to build and install `sdpa-python`.
+
+We need SPOOLES for building `sdpa-python`.
+
+### Obtaining SPOOLES headers
+
+On Linux, `libspooles` is provided by your distribution (as `libspooles` or `libspooles-dev`) and installed system wide (so you need not provide the library path for it in `setupcfg.py`). The best way to check if you have it is to compile a very basic Hello World program with `g++ hello.c -lspooles`. If it throws an error, you can refer to instructions for installing them for your distribution.
+
+You will however, still need to download it because SPOOLES headers are imported by `sdpa-python` (and you will need to provide the include path for it in `setupcfg.py`). It can be obtained from the official [SPOOLES webpage](http://www.netlib.org/linalg/spooles/spooles.2.2.html) or the [Debian package sources](http://ftp.de.debian.org/debian/pool/main/s/spooles/spooles_2.2.orig.tar.gz).
+
+```bash
+wget http://www.netlib.org/linalg/spooles/spooles.2.2.tgz
+mkdir spooles
+tar -zxf spooles.2.2.tgz -C spooles # (OR spooles_2.2.orig.tar.gz if from Debian Sources)
+```
+
+### Obtain and prepare `sdpa-python` for build
 
 You can obtain it by
 
@@ -91,24 +113,18 @@ Then do
 cd sdpa-python
 ```
 
-There is a file `setupcfg.py` in the root directory of the `sdpap` package. We need to edit it and provide the link to the `make.inc` in the `sdpa` folder. Assuming it's located on your desktop:
+There is a file `setupcfg.py` in the root of `sdpa-python`. We need to edit it and provide the link to the `make.inc` in the `sdpa` folder (so it can find `libsdpa.a`) as well the location of SPOOLES library and headers.
 
-```bash
-SDPA_MAKEINC = '$HOME/Desktop/sdpa-7.3.8/etc/make.inc'
+Assuming both `sdpa` and `spooles` are located on your desktop, these lines should become:
+
+```python
+SDPA_MAKEINC = '/home/yourusername/Desktop/sdpa-7.3.8/etc/make.inc'
 ```
 
-### Otaining SPOOLES headers
+and
 
-Another thing you need to specify is the location of the SPOOLES headers
-
-On Linux, `libspooles` is provided by your distribution (as `libspooles` or `libspooles-dev`) and installed system wide (so you need not provide the library path for it in `setupcfg.py`). The best way to check if you have it is to compile a very basic Hello World program with `g++ hello.c -lspooles`. If it throws an error, you can refer to instructions for installing them for your distribution.
-
-You will however, still need to download it because SPOOLES headers are imported by the `sdpa-python` (and you will need to provide the include path for it in `setupcfg.py`). It can be obtained from the official [SPOOLES webpage](http://www.netlib.org/linalg/spooles/spooles.2.2.html). [Debian package sources](http://ftp.de.debian.org/debian/pool/main/s/spooles/spooles_2.2.orig.tar.gz) also provides it.
-
-Once downloaded, edit the following line in `setupcfg.py` to specify the SPOOLES headers location
-
-```bash
-SPOOLES_INCLUDE = '/path/to/spooles/' # headers must be provided
+```python
+SPOOLES_INCLUDE = '/home/yourusername/Desktop/spooles/' # headers must be provided
 ```
 
 ### Install `sdpa-python` Package
