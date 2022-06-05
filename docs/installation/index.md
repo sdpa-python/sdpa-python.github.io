@@ -7,4 +7,10 @@ nav_order: 2
 
 # Installing SDPA for Python
 
-At the moment, SDPA can only be built from source. Please follow the link below for your operating system.
+SDPA for Python can be installed for `x86_64` through `pip`
+
+```bash
+pip install sdpa-python
+```
+
+Wheels for other architectures are not currently available but we have provided build instructions for Windows, Linux and macOS if you would like to build it from source. `sdpa-python` has currently not been tested on other architectures.
