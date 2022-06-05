@@ -11,11 +11,11 @@ We briefly discuss the file formats for storing SDP problems. Most SDP solvers w
 
 There happen to be two widely used formats: one is the **SDPA format** which was introduced by the developers of SDPA itself. The other is the **SeDuMi format** which was introduced by the developer of SeDuMi.
 
-A third format (**CLP**) will be discussed which is used only by SDPAP and is closely related to SeDuMi format.
+A third format (**CLP**) will be discussed which is a generalization of the SeDuMi format and was introduced as part of SDPAP (of which this project is a fork). SDPA for Python can therefore also read problems stored in CLP format.
 
 The two formats are defined at different levels. The SDPA format is specified as the format of a text file to store SDP problem data while the SeDuMi format is specified as a set of variables storing the problem data inside a program. SeDuMi format, can therefore be thought of as a specification in the memory rather than as a specification of the contents of a file on disk.
 
-Interestingly, SDPA can read problems stored in SDPA format, but internally, it uses the SeDuMi representation. SDPAP can also read problems stored in CLP format.
+SDPA can read problems stored in SDPA format, but internally, it uses the SeDuMi representation.
 
 SDPA and SeDuMi formats have been used (either for storage or internally) by many other solvers as well, including SDPT3, Csdp, Dsdp, etc.
 
@@ -37,7 +37,7 @@ The SeDuMi format comprises of the variables `A`, `b`, `c`, `K` which define the
 
 $$
 \begin{aligned}
-(\mathcal{P}) \min_{x} \quad & c^T x\\
+(\mathcal{P}) \min_{x}. \quad & c^T x\\
 \textrm{s.t.} \quad & x \succeq_K 0\\
  & A x - b = 0
 \end{aligned}
@@ -45,7 +45,7 @@ $$
 
 $$
 \begin{aligned}
-(\mathcal{D}) \max_{y} \quad & b^T y\\
+(\mathcal{D}) \max_{y}. \quad & b^T y\\
 \textrm{s.t.} \quad & c - A^T y \succeq_{K^*} 0
 \end{aligned}
 $$
@@ -63,13 +63,13 @@ However, the SeDuMi format does not have to be MATLAB. In fact, we mentioned ear
 
 # CLP Format
 
-SDPAP introduced a third format, called CLP that stands for Conic-form Linear Optimization Problems. The official specification of this format is given in the user manual of SDPAP on the [official SDPA website](http://sdpa.sourceforge.net/download.html).
+SDPAP (of which this wrapper is a fork) introduced a third format, called CLP that stands for Conic-form Linear Optimization Problems. The official specification of this format is given in the [user manual of SDPAP](https://sourceforge.net/projects/sdpa/files/sdpa-p/sdpap_manual.pdf) on the [official SDPA website](http://sdpa.sourceforge.net/download.html).
 
 The CLP format is defined both as a file format, as well as an in memory representation which is basically a generalization the SeDuMi format. In addition to `K`, another cone `J` must as well be specified in the CLP format.
 
 $$
 \begin{aligned}
-(\mathcal{P}) \min_{x} \quad & c^T x\\
+(\mathcal{P}) \min_{x}. \quad & c^T x\\
 \textrm{s.t.} \quad & x \succeq_K 0\\
  & A x - b \succeq_J 0
 \end{aligned}
@@ -77,7 +77,7 @@ $$
 
 $$
 \begin{aligned}
-(\mathcal{D}) \max_{y} \quad & b^T y\\
+(\mathcal{D}) \max_{y}. \quad & b^T y\\
 \textrm{s.t.} \quad & c - A^T y \succeq_{K^*} 0\\
  & y \succeq_{J^*} 0
 \end{aligned}
@@ -85,8 +85,8 @@ $$
 
 The SeDuMi form is the special case of the above in which the cone `J` is the zero cone (and it's dual $$J^*$$ is the Euclidean space). The constraint $$Ax-b \succeq_J 0$$ then becomes $$Ax-b=0$$ and $$y$$ becomes a free variable, making $$y \succeq_{J^*} 0$$ a redundant constraint.
 
-Internally, SDPAP will check if `J` is the zero cone. If it's not, it will transform the other variables such that `J` becomes the zero cone. Interally, SDPA always solves the problem in SeDuMi format.
+Internally, this Python wrapper will check if `J` is the zero cone. If it's not, it will transform the other variables such that `J` becomes the zero cone. Internally, SDPA always solves the problem in SeDuMi format.
 
-After reading the problem data from a CLP file, and before calling the SDPA solver code, SDPAP will convert the CLP format into SeDuMi dual ($$\mathcal{D}$$) problem format using a function named `clp_toLMI`. This conversion involves getting rid of `J` to comply with the SeDuMi format (the structures `A`, `b`, `c` and `K` are adjusted accordingly). 
+After reading the problem data from a CLP file, and before calling the SDPA solver code, this wrapper will convert the CLP format into SeDuMi dual ($$\mathcal{D}$$) problem format using a function named `clp_toLMI`. This conversion involves getting rid of `J` to comply with the SeDuMi format (the structures `A`, `b`, `c` and `K` are adjusted accordingly). 
 
-An unimplemented function `clp_toEQ` is present in SDPAP code which is meant to convert CLP format to SeDuMi primal ($$\mathcal{P}$$) problem format. It's not yet implemented, but we hope to fix that soon.
+An unimplemented function `clp_toEQ` is present in the code which is meant to convert CLP format to SeDuMi primal ($$\mathcal{P}$$) problem format. It's not yet implemented, but we hope to fix that soon.

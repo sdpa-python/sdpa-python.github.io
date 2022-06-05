@@ -22,7 +22,7 @@ The details of the parameters are as below:
 | `maxIteration` | The maximum number of iterations. | `100` |
 | `epsilonStar` | The accuracy of an approximate optimal solution for primal and dual SDP. | `1.0E-7` |
 | `lambdaStar` | An initial point. | `1.0E2` |
-| `omegaStar` | The search region for an optimal solution. |
+| `omegaStar` | The search region for an optimal solution. | `2.0` |
 | `lowerBound` | Lower bound of the minimum objective value of the primal SDP. | `-1.0E5` |
 | `upperBound` | Upper bound of the maximum objective value of the dual SDP. | `1.0E5` |
 | `betaStar` | The parameter for controlling the search direction if the current point is feasible. | `0.1` |
@@ -32,7 +32,7 @@ The details of the parameters are as below:
 | `isSymmetric` | Specify whether to check the symmetricity of input matrices. | `False` |
 | `isDimacs` | Specify whether to compute DIMACS ERROR. | `False` |
 | `numThreads` | Number of Threads for internal computation. | `multiprocessing.cpu_count()` |
-| `convMethod` | Conversion method from CLP to LMI or EQ standard form (`'LMI'` or `'EQ'`). At the moment, `convMethod = 'EQ'` is not yet implemented in the code. Please only use `'LMI'`. | `'LMI'` |
+| `convMethod` | Conversion method from CLP to LMI or EQ standard form (`'LMI'` or `'EQ'`). <span style="color:red">At the moment, `convMethod = 'EQ'` is not yet implemented in the code. Please only use `'LMI'`.</span> | `'LMI'` |
 
 The following parameters specify algorithms to exploit sparsity.
 
@@ -45,6 +45,8 @@ Two recommended sets of parameter values for exploiting sparsity:
 
 1. `convMethod = 'EQ'`, `domainMethod = 'clique'`, `rangeMethod  = 'decomp'`
 2. `convMethod = 'LMI'`, `domainMethod = 'basis'`, `rangeMethod  = 'clique'`
+
+<span style="color:red">At the moment, `domainMethod = 'clique'` and `rangeMethod = 'clique'` are not yet implemented in the code. Please only use the other available options for the `domainMethod` and `rangeMethod` parameters.</span>
 
 The following parameters are for free variables elimination.
 

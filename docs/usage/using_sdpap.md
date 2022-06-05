@@ -141,7 +141,6 @@ Now, we can define and solve the sample CLP given in the beginning of this secti
 
 ```python
 import sdpap
-import numpy as np
 from scipy import matrix
 
 A = matrix([
@@ -150,12 +149,11 @@ A = matrix([
     [0, -8, -8, -2]    
 ])
 
-b = np.matrix([
+b = matrix([
     [48],
     [-8],
     [20]
 ])
-print("test")
 
 c = matrix([
     [-11],
@@ -170,11 +168,50 @@ J = sdpap.SymCone(f=3)
 x, y, sdpapinfo , timeinfo , sdpainfo = sdpap.solve(A,b,c,K,J)
 ```
 
-The result will be the following:
+The output will be as below:
+
 ```
 ---------- SDPAP Start ----------
+SDPA start at [Sun Jun  5 10:43:05 2022]
+NumThreads  is set as 12
+Schur computation : DENSE 
+Entering DMUMPS driver with JOB, N, NZ =  -2           0              0
+Converted to SDPA internal data / Starting SDPA main loop
+   mu      thetaP  thetaD  objP      objD      alphaP  alphaD  beta 
+ 0 1.0e+04 1.0e+00 1.0e+00 -0.00e+00 -1.20e+03 1.0e+00 9.1e-01 2.00e-01
+ 1 1.6e+03 0.0e+00 9.4e-02 +9.23e+02 -7.51e+01 2.3e+00 9.6e-01 2.00e-01
+ 2 1.7e+02 6.4e-17 3.6e-03 +2.80e+02 +3.74e+01 1.3e+00 1.0e+00 2.00e-01
+ 3 1.8e+01 6.4e-17 1.5e-17 +7.70e+01 +4.19e+01 9.9e-01 9.9e-01 1.00e-01
+ 4 1.9e+00 7.2e-17 7.5e-18 +4.57e+01 +4.19e+01 1.0e+00 9.0e+01 1.00e-01
+ 5 1.9e-01 7.3e-17 1.1e-15 +4.23e+01 +4.19e+01 1.0e+00 1.0e+00 1.00e-01
+ 6 1.9e-02 6.4e-17 2.2e-17 +4.19e+01 +4.19e+01 1.0e+00 9.0e+01 1.00e-01
+ 7 1.9e-03 6.3e-17 2.1e-15 +4.19e+01 +4.19e+01 1.0e+00 1.0e+00 1.00e-01
+ 8 1.9e-04 8.3e-17 3.0e-17 +4.19e+01 +4.19e+01 1.0e+00 1.0e+00 1.00e-01
+ 9 1.9e-05 7.9e-17 1.5e-17 +4.19e+01 +4.19e+01 1.0e+00 9.0e+01 1.00e-01
+10 1.9e-06 6.5e-17 1.6e-15 +4.19e+01 +4.19e+01 1.0e+00 9.0e+01 1.00e-01
+
+phase.value  = pdOPT     
+   Iteration = 10
+          mu = +1.9180668442023463e-06
+relative gap = +9.1554458700816248e-08
+        gap  = +3.8361319951718542e-06
+     digits  = +7.0383205007122669e+00
+objValPrimal = +4.1900003836133735e+01
+objValDual   = +4.1900000000001739e+01
+p.feas.error = +7.2685417628031834e-15
+d.feas.error = +1.5063505998114124e-12
+total time   = 0.016597
+  main loop time = 0.016594
+      total time = 0.016597
+file  check time = 0.000000
+file change time = 0.000003
+file   read time = 0.000000
+Converting optimal solution to CLP format
+SDPA end at [Sun Jun  5 10:43:05 2022]
 Start: getCLPresult
 Making result infomation...
+/opt/anaconda3/envs/py310/lib/python3.10/site-packages/scipy/sparse/linalg/_eigen/arpack/arpack.py:1265: RuntimeWarning: k >= N - 1 for N * N square matrix. Attempting to use scipy.linalg.eig instead.
+  warnings.warn("k >= N - 1 for N * N square matrix. "
 ========================================
  SDPAP: Result
 ========================================
@@ -184,14 +221,16 @@ Making result infomation...
      frvMethod = split
   domainMethod = none
    rangeMethod = none
-     primalObj = -4.1899999999999977e+01
-       dualObj = -4.1900003836133791e+01
-    dualityGap = +9.1554502113451059e-08
-   primalError = +1.4210854715202004e-14
+     primalObj = -4.1900000000001739e+01
+       dualObj = -4.1900003836133735e+01
+    dualityGap = +9.1554458700816248e-08
+   primalError = +1.5063505998114124e-12
      dualError = +0.0000000000000000e+00
-   convertTime = 0.000308
-     solveTime = 0.015920
-retrievingTime = 0.000016
-     totalTime = 0.018300
+   convertTime = 0.000262
+     solveTime = 0.018632
+retrievingTime = 0.000003
+     totalTime = 0.020157
 ---------- SDPAP End ----------
 ```
+
+The information printed in the `Result` section of the output log will be returned in the dictionary `sdpainfo`. The dictionary `sdpapinfo` will contain a subset of this information.

@@ -12,7 +12,7 @@ Below is a non-exhaustive list of opportunities for contributing to the developm
 ### Small scope projects
 
 1. Implement multi-level output logging. CVXPY would ideally require SDPA to produce no output in non verbose mode, but SDPA still prints some output even when `display` is set to `no` in solver options.
-2. Contribute build instructions for AMD AOCC and Nvidia cuBLAS to this documentation.
+2. Contribute build instructions for Intel MKL, AMD AOCL and Nvidia cuBLAS to this documentation.
 
 ### Medium scope projects
 
@@ -21,5 +21,4 @@ Below is a non-exhaustive list of opportunities for contributing to the developm
 
 ### Large scope projects
 
-1. Translation of Fortran based MUMPS routines to C++ to remove the need for an additional Fortran compiler while building SDPA
-2. Add support for SOCP constraints to make the package a complete SQLP solver. This is a contribution to SDPA (and not just SDPA for Python).
+1. Add support for SOCP constraints to make the package a complete SQLP solver. This is a contribution to SDPA (and not just SDPA for Python).
