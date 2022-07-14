@@ -1,8 +1,8 @@
 ---
 layout: default
-title: A Gentle Start
-parent: Usage
-nav_order: 2
+title: Usage
+has_children: true
+nav_order: 4
 ---
 
 # A Gentle Start
