@@ -2,6 +2,7 @@
 layout: default
 title: Building on Windows
 parent: Installation
+sdpa_latest_version: 7.3.16
 ---
 
 # Building SDPA for Python on Windows
@@ -36,14 +37,16 @@ This will give us the basic build tools, i.e. `make` and `gcc`/`g++`.
 
 We will remain on the **MSYS2 MSYS** shell until the build step (when we will switch to **MSYS2 MinGW x64**).
 
-## Obtaining and installing SDPA
+## Obtaining and building SDPA
 
-The primary software package containing SDPA is named simply `sdpa` and the source can be obtained from the [official website](http://sdpa.sourceforge.net/download.html). Sourceforge does not allow a direct download link, however, the specific file required is [sdpa_7.3.8.tar.gz](https://downloads.sourceforge.net/project/sdpa/sdpa/sdpa_7.3.8.tar.gz).
+The primary software package containing SDPA is named simply `sdpa` and the source can be obtained from the [official website](http://sdpa.sourceforge.net/download.html). Currently, the latest version is {{page.sdpa_latest_version}}.
+
+Sourceforge does not allow a direct download link, however, the specific file required is [sdpa_{{page.sdpa_latest_version}}.tar.gz](https://downloads.sourceforge.net/project/sdpa/sdpa/sdpa_{{page.sdpa_latest_version}}.tar.gz).
 
 Once downloaded, unzip it using:
 
 ```bash
-tar -zxf sdpa_7.3.8.tar.gz
+tar -zxf sdpa_{{page.sdpa_latest_version}}.tar.gz
 ```
 
 **Note**: On Windows, it is common to have a space in the name of the user folder (which is the parent of Desktop). Spaces in folder names will cause problems during the build phase, so it's advised to unzip `sdpa` in a location which does not have spaces. If you do so in `C:`, it's recommended to create a subfolder (e.g. `C:\sdpa`) and give yourself write permissions to it (right click, open Properties and disable "Read-only" option).
@@ -57,13 +60,13 @@ Building SDPA also requires you to have
 1. A **BLAS/LAPACK library**.
     Just like Linux, MSYS2 has two alternative packages. [mingw-w64-x86_64-lapack](https://packages.msys2.org/package/mingw-w64-x86_64-lapack) is the [reference implementation](http://www.netlib.org/blas/) while [mingw-w64-x86_64-openblas](https://packages.msys2.org/package/mingw-w64-x86_64-openblas) is the optimized [OpenBLAS](https://www.openblas.net/) implementation.
 
-    They can be installed using `pacman` on the **MSYS2 MSYS** shell by
+    OpenBLAS is recommended as it gives much better performance and can be installed using `pacman` on the **MSYS2 MSYS** shell by
 
     ```bash
-    pacman -S mingw-w64-x86_64-lapack
+    pacman -S mingw-w64-x86_64-openblas
     ```
 
-    The best way to verify installation is to compile a very basic Hello World program with `g++ hello.c -lblas -llapack`.
+    The best way to verify installation is to compile a very basic Hello World program with `g++ hello.c -lopenblas` (or `g++ hello.c -lblas -llapack` for the default, i.e. reference BLAS).
 
 2. A **FORTRAN compiler**.
     It will be required to build [MUMPS](http://mumps.enseeiht.fr) which is written in Fortran.
@@ -73,21 +76,9 @@ Building SDPA also requires you to have
 
 ### Minor fixes
 
-Since `sdpa` hasn't been updated for a while you **might** need to add `-fallow-argument-mismatch` flag for the Fortran compiler. **Do this only if you run into a compiler error** for `gfortran`. You need to add this in the string defined on the following line in the `configure` script in the root folder:
+The `sdpa` buildsystem will download [MUMPS](http://mumps.enseeiht.fr) and build it. A `Makefile` has been provided inside the `mumps` subfolder of `sdpa` source. Depending on the version of `gfortran` that you use, you may or may not need the `-funroll-all-loops` flag provided in this file. 
 
-Assuming you haven't changed this line for compiler optimization reasons, this line should look line this:
-
-```bash
-FCFLAGS="$FCFLAGS -Wall -fPIC -funroll-all-loops"
-```
-
-Modify it so it should look like
-
-```bash
-FCFLAGS="$FCFLAGS -Wall -fPIC -funroll-all-loops -fallow-argument-mismatch"
-```
-
-You may want to modify the other flags for processor specific reasons, but we will not cover them in this post.
+Older versions of `gfortran` will not need this flag and do not recognize it. If while running `make`, you run into a compiler error for `gfortran`, remove this flag.
 
 ### Build
 
@@ -96,9 +87,19 @@ At this point, you need to switch to the **MSYS2 MinGW x64** shell in the Start 
 `cd` to the directory containing `sdpa`. Assuming you created an `sdpa` subfolder in `C:` drive, do
 
 ```bash
-cd /c/sdpa/sdpa-7.3.8/
+cd /c/sdpa/sdpa-{{page.sdpa_latest_version}}/
 ./configure
 ```
+
+By default, the configure script will link against the [reference BLAS](http://www.netlib.org/blas/). If you want to use an alternate BLAS/LAPACK, you can override the flags `--with-blas` and `--with-lapack`.
+
+For example, if you want to use OpenBLAS, this should become
+
+```bash
+./configure --with-blas="-lopenblas" --with-lapack="-lopenblas"
+```
+
+`libopenblas` provides both BLAS and LAPACK.
 
 This should check whether all requirements are met for the build. Once done, issue the make command:
 
@@ -116,7 +117,7 @@ Let's do a test run on the `sdpa` binary to make sure all is well until this poi
 
 **Note 2**: On Windows, the line endings are `CRLF` while the examples provided with `sdpa` use UNIX line endings (i.e. just `LF`). Open `example1.dat` in a code editor (e.g. Visual Studio Code) and change the line endings to `CRLF`. Otherwise, the problem data will not be read correctly.
 
-Then while still within the `sdpa-7.3.8` folder, do
+Then while still within the `sdpa-{{page.sdpa_latest_version}}` folder, do
 
 ```bash
 ./sdpa example1.dat example1.out
@@ -152,6 +153,20 @@ tar -zxf spooles.2.2.tgz -C spooles # (OR spooles_2.2.orig.tar.gz if from Debian
 
 We will however still need MinGW on that shell, so you will need to add the folder containing MinGW binaries to the PATH in that shell (e.g. `C:\msys64\mingw64\bin` if you installed MSYS with default options).
 
+MinGW also comes with a `python` binary, so make sure to add it to the end of the `PATH` variable so it does not override your desired Python in that shell.
+
+For Command Prompt or the Anaconda Shell:
+
+```bat
+set PATH=%PATH%;C:\msys64\mingw64\bin
+```
+
+For PowerShell or Anaconda PowerShell:
+
+```bash
+$env:path = $env:path + ';C:\msys64\mingw64\bin'
+```
+
 ### Obtain and prepare `sdpa-python` for build
 
 You can obtain it by
@@ -166,19 +181,34 @@ Then do
 cd sdpa-python
 ```
 
-There is a file `setupcfg.py` in the root of `sdpa-python`. We need to edit it and provide the location of the `sdpa` folder (so it can find `libsdpa.a`) as well the location of SPOOLES library and headers.
+There is a file `setupcfg.py` in the root of `sdpa-python`. We need to edit it and provide 
 
-Assuming both `sdpa` and `spooles` are located in a subfolder in the `C:` drive, the relevant lines should become:
+We need to edit it and provide
 
-```python
-SDPA_DIR =  os.path.join("C:\\", "sdpa", "sdpa-7.3.8")
-```
+1. The link to the `make.inc` in the `sdpa` folder (so it can find `libsdpa.a`). Assuming you extracted it in `C:\sdpa`:
 
-and
+    ```python
+    SDPA_DIR =  os.path.join("C:\\", "sdpa", "sdpa-{{page.sdpa_latest_version}}")
+    ```
 
-```python
-SPOOLES_INCLUDE =  os.path.join("C:\\", "sdpa", "spooles")
-```
+2. The location of SPOOLES library and headers. Assuming you extracted it in `C:\sdpa`:
+
+    ```python
+    SPOOLES_INCLUDE =  os.path.join("C:\\", "sdpa", "spooles")
+    ```
+
+3. The location of MinGW static libraries. Assuming it was installed with the default options:
+
+    ```python
+    MINGW_LIBS    =  os.path.join("C:\\", "msys64", "mingw64", "lib")
+    ```
+
+4. Names of BLAS/LAPACK if you did not use the reference BLAS. Please use the same BLAS/LAPACK that you used while building `sdpa`. Assuming you used OpenBLAS:
+
+    ```python
+    LAPACK_NAME = 'openblas'
+    BLAS_NAME = 'openblas'
+    ```
 
 ### Build `sdpa-python` Package
 

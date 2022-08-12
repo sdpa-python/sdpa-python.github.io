@@ -2,20 +2,23 @@
 layout: default
 title: Building on Linux
 parent: Installation
+sdpa_latest_version: 7.3.16
 ---
 
 # Building SDPA for Python on Linux
 
 SDPA for Python (`sdpa-python`) is a wrapper on top of the SDPA package. We will go over building SDPA first, followed by SDPA for Python.
 
-## Obtaining and installing SDPA
+## Obtaining and building SDPA
 
-The primary software package containing SDPA is named simply `sdpa` and the source can be obtained from the [official website](http://sdpa.sourceforge.net/download.html). Sourceforge does not allow a direct download link, however, the specific file required is [sdpa_7.3.8.tar.gz](https://downloads.sourceforge.net/project/sdpa/sdpa/sdpa_7.3.8.tar.gz).
+The primary software package containing SDPA is named simply `sdpa` and the source can be obtained from the [official website](http://sdpa.sourceforge.net/download.html). Currently, the latest version is {{page.sdpa_latest_version}}.
+
+Sourceforge does not allow a direct download link, however, the specific file required is [sdpa_{{page.sdpa_latest_version}}.tar.gz](https://downloads.sourceforge.net/project/sdpa/sdpa/sdpa_{{page.sdpa_latest_version}}.tar.gz).
 
 Once downloaded, unzip it using:
 
 ```bash
-tar -zxf sdpa_7.3.8.tar.gz
+tar -zxf sdpa_{{page.sdpa_latest_version}}.tar.gz
 ```
 
 To build SDPA (with or without the Python wrapper), you need to have the basic build tools, i.e. `make` and `gcc`/`g++` on your computer. On Linux, please refer to the instructions for your package manager if you do not already have them.
@@ -25,9 +28,11 @@ To build SDPA (with or without the Python wrapper), you need to have the basic b
 Building SDPA also requires you to have
 
 1. A **BLAS/LAPACK library**.
-    On Linux, `libblas` and `liblapack` are provided by your distribution. The best way to check if you have them installed is to compile a very basic Hello World program with `g++ hello.c -lblas -llapack`. If they aren't there, you can refer to instructions for installing them for your distribution.
+    On Linux, `libblas` and `liblapack` are provided by your distribution.
 
     Mostly Linux would have two alternative packages, `libblas` and `libopenblas`. `libblas` is the [reference implementation](http://www.netlib.org/blas/) while `libopenblas` is the optimized [OpenBLAS](https://www.openblas.net/) implementation. OpenBLAS is recommended as it gives much better performance.
+
+    The best way to check if it's present is to compile a very basic Hello World program with `g++ hello.c -lopenblas` (or `g++ hello.c -lblas -llapack` for the default, i.e. reference BLAS). If you don't have OpenBLAS, you can refer to the instructions for your distribution for installing it.
 
 2. A **FORTRAN compiler**.
     It will be required to build [MUMPS](http://mumps.enseeiht.fr) which is written in Fortran.
@@ -37,29 +42,27 @@ Building SDPA also requires you to have
 
 ### Minor fixes
 
-Since `sdpa` hasn't been updated for a while you **might** need to add `-fallow-argument-mismatch` flag for the Fortran compiler. **Do this only if you run into a compiler error** for `gfortran`. You need to add this in the string defined on the following line in the `configure` script in the root folder:
+The `sdpa` buildsystem will download [MUMPS](http://mumps.enseeiht.fr) and build it. A `Makefile` has been provided inside the `mumps` subfolder of `sdpa` source. Depending on the version of `gfortran` that you use, you may or may not need the `-funroll-all-loops` flag provided in this file. 
 
-Assuming you haven't changed this line for compiler optimization reasons, this line should look line this:
-
-```bash
-FCFLAGS="$FCFLAGS -Wall -fPIC -funroll-all-loops"
-```
-
-Modify it so it should look like
-
-```bash
-FCFLAGS="$FCFLAGS -Wall -fPIC -funroll-all-loops -fallow-argument-mismatch"
-```
-
-You may want to modify the other flags for processor specific reasons, but we will not cover them in this post.
+Older versions of `gfortran` will not need this flag and do not recognize it. If while running `make`, you run into a compiler error for `gfortran`, remove this flag.
 
 ### Build
 
-The next step should be to run the configure script in the `sdpa` root directory. Assuming you have `sdpa` unzipped on your Desktop:
+The next step should be to run the configure script in the `sdpa` root directory. Assuming you have `sdpa` unzipped in your home folder:
 
 ```bash
-./configure --prefix=$HOME/Desktop/sdpa-7.3.8
+./configure --prefix=$HOME/sdpa-{{page.sdpa_latest_version}}
 ```
+
+By default, the configure script will link against the [reference BLAS](http://www.netlib.org/blas/). If you want to use an alternate BLAS/LAPACK, you can override the flags `--with-blas` and `--with-lapack`.
+
+For example, if you want to use OpenBLAS, this should become
+
+```bash
+./configure --prefix=$HOME/sdpa-{{page.sdpa_latest_version}} --with-blas="-lopenblas" --with-lapack="-lopenblas"
+```
+
+`libopenblas` provides both BLAS and LAPACK.
 
 This should check whether all requirements are met for the build. Once done, issue the make command:
 
@@ -69,11 +72,11 @@ make
 
 This will generate the `sdpa` binary as well as `libsdpa.a` static library. The `libsdpa.a` library is what the Python wrapper will link against.
 
-This will generate the `make.inc` file which `sdpa-python` would require you to link to.
+This will also generate the `make.inc` file which `sdpa-python` would require you to link to.
 
 ### Test run the SDPA binary
 
-Let's do a test run on the `sdpa` binary to make sure all is well until this point. While still within the `sdpa-7.3.8` folder, do
+Let's do a test run on the `sdpa` binary to make sure all is well until this point. While still within the `sdpa-{{page.sdpa_latest_version}}` folder, do
 
 ```bash
 ./sdpa example1.dat example1.out
@@ -113,19 +116,26 @@ Then do
 cd sdpa-python
 ```
 
-There is a file `setupcfg.py` in the root of `sdpa-python`. We need to edit it and provide the link to the `make.inc` in the `sdpa` folder (so it can find `libsdpa.a`) as well the location of SPOOLES library and headers.
+There is a file `setupcfg.py` in the root of `sdpa-python`. We need to edit it and provide
 
-Assuming both `sdpa` and `spooles` are located on your desktop, these lines should become:
+1. The link to the `make.inc` in the `sdpa` folder (so it can find `libsdpa.a`). Assuming you extracted it in your home folder:
 
-```python
-SDPA_MAKEINC = '/home/yourusername/Desktop/sdpa-7.3.8/etc/make.inc'
-```
+    ```python
+    SDPA_MAKEINC = '/home/yourusername/sdpa-{{page.sdpa_latest_version}}/etc/make.inc'
+    ```
 
-and
+2. The location of SPOOLES library and headers. Assuming you extracted it in your home folder:
 
-```python
-SPOOLES_INCLUDE = '/home/yourusername/Desktop/spooles/' # headers must be provided
-```
+    ```python
+    SPOOLES_INCLUDE = '/home/yourusername/spooles/'
+    ```
+
+3. Names of BLAS/LAPACK if you did not use the reference BLAS. Please use the same BLAS/LAPACK that you used while building `sdpa`. Assuming you used OpenBLAS:
+
+    ```python
+    LAPACK_NAME = 'openblas'
+    BLAS_NAME = 'openblas'
+    ```
 
 ### Install `sdpa-python` Package
 
