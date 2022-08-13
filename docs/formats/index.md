@@ -9,9 +9,15 @@ nav_order: 3
 
 We briefly discuss the file formats for storing SDP problems. Most SDP solvers were developed in the late 1990s, which is when these formats were specified.
 
+{: .attention }
+This section is an optional read if you want to use SDPA for Python. For quick start, please see the [Usage](https://sdpa-python.github.io/docs/usage/) section.
+
+{: .warning }
+*SDPA for Python* solves an problem in a different standard form than *SDPA*. Below, when we say SDPA, we mean the backend software used by SDPA for Python. SDPA for Python, can however read problems stored in SDPA sparse format.
+
 There happen to be two widely used formats: one is the **SDPA format** which was introduced by the developers of SDPA itself. The other is the **SeDuMi format** which was introduced by the developer of SeDuMi.
 
-A third format (**CLP**) will be discussed which is a generalization of the SeDuMi format and is used by SDPAP (of which this project is a fork).
+A third format (**CLP**) will be discussed which is a generalization of the SeDuMi format and is used by SDPA for Python (fork of SDPAP).
 
 The primal-dual pairs of problems represented in SDPA and SeDuMi formats are reverse of each other. In SDPA, the primal problem is in a linear-matrix-inequality form. In SeDuMi, the dual problem is in a linear-matrix-inequality form.
 
