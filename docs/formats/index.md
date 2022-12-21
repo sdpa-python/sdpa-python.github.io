@@ -68,8 +68,8 @@ The SeDuMi solver solves the following primal ($$\mathcal{P}$$) and dual ($$\mat
 $$
 \begin{aligned}
 (\mathcal{P}) \min_{x}. \quad & c^T x\\
-\textrm{s.t.} \quad & x \succeq_K 0\\
- & A x - b = 0
+\textrm{s.t.} \quad & A x - b = 0\\
+ & x \succeq_K 0
 \end{aligned}
 $$
 
@@ -93,6 +93,8 @@ A commonly used dataset for problems in SeDuMi format is the [DIMACS](http://arc
 
 The primal-dual pair in SeDuMi is the reverse of that in SDPA. In SeDuMi, the dual problem is a linear-matrix-inequality form.
 
+To see the relationship between SDPA and SeDuMi formats, please see the subsection on the [Interconversion between SDPA and SeDuMi Formats](sdpa_sedumi.html).
+
 # CLP Format
 
 SDPAP (of which this wrapper is a fork) introduced a third format, called CLP that stands for Conic-form Linear Optimization Problems. The official specification of this format is given in the [user manual of SDPAP](https://sourceforge.net/projects/sdpa/files/sdpa-p/sdpap_manual.pdf) on the [official SDPA website](http://sdpa.sourceforge.net/download.html).
@@ -102,8 +104,8 @@ The CLP format is defined both as a file format, as well as an in memory represe
 $$
 \begin{aligned}
 (\mathcal{P}) \min_{x}. \quad & c^T x\\
-\textrm{s.t.} \quad & x \succeq_K 0\\
- & A x - b \succeq_J 0
+\textrm{s.t.} \quad & A x - b \succeq_J 0\\
+ & x \succeq_K 0
 \end{aligned}
 $$
 
