@@ -11,8 +11,8 @@ Below is a non-exhaustive list of opportunities for contributing to the developm
 
 ### Small scope projects
 
-1. Implement multi-level output logging. CVXPY would ideally require SDPA to produce no output in non verbose mode, but SDPA still prints some output even when `display` is set to `no` in solver options.
-2. Contribute build instructions for Intel MKL, AMD AOCL and Nvidia cuBLAS to this documentation.
+1. Improving this documentation.
+2. Writing unit tests/benchmarks.
 
 ### Medium scope projects
 
