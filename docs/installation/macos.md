@@ -3,6 +3,8 @@ layout: default
 title: Building on macOS
 parent: Installation
 sdpa_latest_version: 7.3.16
+# mumps_url: http://mumps.enseeiht.fr
+mumps_url: https://mumps-solver.org
 ---
 
 # Building SDPA for Python on macOS
@@ -37,18 +39,18 @@ Building SDPA also requires you to have
     The best way to check if they are present is to compile a very basic Hello World program with `g++ hello.c -lblas -llapack`. On macOS, `-lblas` and `-llapack` will use the BLAS/LAPACK provided by Accelerate framework.
 
 2. A **FORTRAN compiler**.
-    It will be required to build [MUMPS](http://mumps.enseeiht.fr) which is written in Fortran.
+    It will be required to build [MUMPS]({{page.mumps_url}}) which is written in Fortran.
 
     On macOS, the most convenient to install and recent `gfortran` binary that I found at time of writing is provided by [this GitHub repository](https://github.com/fxcoudert/gfortran-for-macOS).
 
 
 ### Minor fixes
 
-The `sdpa` buildsystem will download [MUMPS](http://mumps.enseeiht.fr) and build it. A `Makefile` has been provided inside the `mumps` subfolder of `sdpa` source. Depending on the version of `gfortran` that you use, you may or may not need the `-funroll-all-loops` flag provided in this file. 
+The `sdpa` buildsystem will download [MUMPS]({{page.mumps_url}}) and build it. A `Makefile` has been provided inside the `mumps` subfolder of `sdpa` source. Depending on the version of `gfortran` that you use, you may or may not need the `-funroll-all-loops` flag provided in this file. 
 
 1. Older versions of `gfortran` will not need this flag and do not recognize it. If while running `make`, you run into a compiler error for `gfortran`, remove this flag.
 
-2. Secondly, on macOS you may not have `wget` on your system. The `Makefile` will use `wget` to download the [MUMPS](http://mumps.enseeiht.fr) source. You can modify the following line in the `Makefile` in the `mumps` subfolder to use `curl` instead of `wget`:
+2. Secondly, on macOS you may not have `wget` on your system. The `Makefile` will use `wget` to download the [MUMPS]({{page.mumps_url}}) source. You can modify the following line in the `Makefile` in the `mumps` subfolder to use `curl` instead of `wget`:
 
     ```bash
     wget http://ftp.de.debian.org/debian/pool/main/m/mumps/${MUMPS_TAR_FILE}

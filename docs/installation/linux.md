@@ -3,6 +3,8 @@ layout: default
 title: Building on Linux
 parent: Installation
 sdpa_latest_version: 7.3.16
+# mumps_url: http://mumps.enseeiht.fr
+mumps_url: https://mumps-solver.org
 ---
 
 # Building SDPA for Python on Linux
@@ -35,14 +37,14 @@ Building SDPA also requires you to have
     The best way to check if it's present is to compile a very basic Hello World program with `g++ hello.c -lopenblas` (or `g++ hello.c -lblas -llapack` for the default, i.e. reference BLAS). If you don't have OpenBLAS, you can refer to the instructions for your distribution for installing it.
 
 2. A **FORTRAN compiler**.
-    It will be required to build [MUMPS](http://mumps.enseeiht.fr) which is written in Fortran.
+    It will be required to build [MUMPS]({{page.mumps_url}}) which is written in Fortran.
 
     On Linux, `gfortran` is installed if you have `g++` installed.
 
 
 ### Minor fixes
 
-The `sdpa` buildsystem will download [MUMPS](http://mumps.enseeiht.fr) and build it. A `Makefile` has been provided inside the `mumps` subfolder of `sdpa` source. Depending on the version of `gfortran` that you use, you may or may not need the `-funroll-all-loops` flag provided in this file. 
+The `sdpa` buildsystem will download [MUMPS]({{page.mumps_url}}) and build it. A `Makefile` has been provided inside the `mumps` subfolder of `sdpa` source. Depending on the version of `gfortran` that you use, you may or may not need the `-funroll-all-loops` flag provided in this file. 
 
 Older versions of `gfortran` will not need this flag and do not recognize it. If while running `make`, you run into a compiler error for `gfortran`, remove this flag.
 
