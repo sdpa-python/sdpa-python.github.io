@@ -13,7 +13,7 @@ SDPA for Python can be installed for `x86_64` through `pip`. Two variants of thi
 pip install sdpa-python
 ```
 
-The package using the SDPA Multiprecision (GMP) backend can be installed by
+The package using the [SDPA Multiprecision](https://github.com/sdpa-python/sdpa-multiprecision) (GMP) backend can be installed by
 
 ```bash
 pip install sdpa-multiprecision

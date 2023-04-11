@@ -205,6 +205,7 @@ We need to edit it and provide
 
     ```python
     BLAS_LAPACK_LIBS = ['openblas', 'gomp']
+    ```
 
 5. Only if using the **SDPA Multiprecision** backend, the location of GMP library and headers:
 
