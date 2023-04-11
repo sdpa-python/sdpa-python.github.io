@@ -39,11 +39,13 @@ This will give us the basic build tools, i.e. `make` and `gcc`/`g++`.
 
 We will remain on the **MSYS2 MSYS** shell until the build step (when we will switch to **MSYS2 MinGW x64**).
 
-## Obtaining and building SDPA
+## Obtaining and building the backend
 
-The primary software package containing SDPA is named simply `sdpa` and the source can be obtained from the [official website](http://sdpa.sourceforge.net/download.html). Currently, the latest version is {{page.sdpa_latest_version}}.
+As a backend, we can use either the regular SDPA package, or the SDPA Multiprecision variant. SDPA Multiprecision is a fork of SDPA-GMP.
 
-Sourceforge does not allow a direct download link, however, the specific file required is [sdpa_{{page.sdpa_latest_version}}.tar.gz](https://downloads.sourceforge.net/project/sdpa/sdpa/sdpa_{{page.sdpa_latest_version}}.tar.gz).
+If you choose to use **SDPA Multiprecision**, please follow the instructions in the README of its [GitHub repository](https://github.com/sdpa-python/sdpa-multiprecision), and then skip directly to the [next section](#obtaining-and-installing-sdpa-python-wrapper) on building the Python wrapper.
+
+If you choose to use the **regular SDPA package**, please download it from the [official website](http://sdpa.sourceforge.net/download.html). Currently, the latest version is {{page.sdpa_latest_version}}. Sourceforge does not allow a direct download link, however, the specific file required is [sdpa_{{page.sdpa_latest_version}}.tar.gz](https://downloads.sourceforge.net/project/sdpa/sdpa/sdpa_{{page.sdpa_latest_version}}.tar.gz).
 
 Once downloaded, unzip it using:
 
@@ -129,11 +131,11 @@ This should complete a test run the `sdpa` binary using one of the provided exam
 
 ## Obtaining and installing SDPA Python wrapper
 
-Once you have built and done a test run on `sdpa`, you have a working SDPA binary, it's finally time to build and install `sdpa-python`.
+Once you have built and done a test run on `sdpa` (or `sdpa_gmp` if using the Multiprecision backend), you have a working SDPA binary, it's finally time to build and install `sdpa-python`.
 
 We need SPOOLES for building `sdpa-python`.
 
-### Obtaining SPOOLES headers
+### Obtaining SPOOLES library and headers
 
 On MSYS2, `libspooles` can be installed (from the **MSYS2 MSYS** shell) using
 
@@ -141,15 +143,9 @@ On MSYS2, `libspooles` can be installed (from the **MSYS2 MSYS** shell) using
 pacman -S mingw-w64-x86_64-spooles
 ```
 
+**Note**: SDPA Multiprecision also uses SPOOLES. If you successfully built SDPA Multiprecision, you should already have SPOOLES on your system.
+
 The best way to verify installation is to compile a very basic Hello World program with `g++ hello.c -lspooles`.
-
-You will however, still need to download it because SPOOLES headers are imported by `sdpa-python` (and you will need to provide the include path for it in `setupcfg.py`). It can be obtained from the official [SPOOLES webpage](http://www.netlib.org/linalg/spooles/spooles.2.2.html) or the [Debian package sources](http://ftp.de.debian.org/debian/pool/main/s/spooles/spooles_2.2.orig.tar.gz).
-
-```bash
-wget http://www.netlib.org/linalg/spooles/spooles.2.2.tgz
-mkdir spooles
-tar -zxf spooles.2.2.tgz -C spooles # (OR spooles_2.2.orig.tar.gz if from Debian Sources)
-```
 
 **Before proceeding to the next section, we now need to switch to whatever shell has our desired Python (e.g. Anaconda shell, PowerShell, etc).**
 
@@ -187,30 +183,36 @@ There is a file `setupcfg.py` in the root of `sdpa-python`. We need to edit it a
 
 We need to edit it and provide
 
-1. The link to the `make.inc` in the `sdpa` folder (so it can find `libsdpa.a`). Assuming you extracted it in `C:\sdpa`:
+1. The location of SDPA headers and static library (i.e. `libsdpa.a` or `libsdpa_gmp.a`):
 
     ```python
-    SDPA_DIR =  os.path.join("C:\\", "sdpa", "sdpa-{{page.sdpa_latest_version}}")
+    SDPA_DIR =  os.path.join("C:\\", "path", "to", "sdpa_package_name")
     ```
 
-2. The location of SPOOLES library and headers. Assuming you extracted it in `C:\sdpa`:
+2. The location of SPOOLES headers. Assuming MSYS2 was installed in the default location:
 
     ```python
-    SPOOLES_INCLUDE =  os.path.join("C:\\", "sdpa", "spooles")
+    SPOOLES_INCLUDE =  os.path.join("C:\\", "msys64", "mingw64", "include", "spooles")
     ```
 
-3. The location of MinGW static libraries. Assuming it was installed with the default options:
+3. The location of other common static libraries. Assuming MSYS2 was installed in the default location:
 
     ```python
     MINGW_LIBS    =  os.path.join("C:\\", "msys64", "mingw64", "lib")
     ```
 
-4. Names of BLAS/LAPACK if you did not use the reference BLAS. Please use the same BLAS/LAPACK that you used while building `sdpa`. Assuming you used OpenBLAS:
+4. Only if using the **regular SDPA** backend, the names of the BLAS/LAPACK implementation(s) that you intend to use. Please use the same one as you did while building the SDPA (backend) package. Assuming you used OpenBLAS:
 
     ```python
-    LAPACK_NAME = 'openblas'
-    BLAS_NAME = 'openblas'
+    BLAS_LAPACK_LIBS = ['openblas', 'gomp']
+
+5. Only if using the **SDPA Multiprecision** backend, the location of GMP library and headers:
+
+    ```python
+    GMP_DIR = os.path.join("C:\\", "path", "to", "gmp-version")
     ```
+
+6. Lastly, if you are using the **SDPA Multiprecision** backend, please set `USEGMP = True` in this file.
 
 ### Build `sdpa-python` Package
 

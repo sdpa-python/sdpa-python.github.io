@@ -11,11 +11,13 @@ mumps_url: https://mumps-solver.org
 
 SDPA for Python (`sdpa-python`) is a wrapper on top of the SDPA package. We will go over building SDPA first, followed by SDPA for Python.
 
-## Obtaining and building SDPA
+## Obtaining and building the backend
 
-The primary software package containing SDPA is named simply `sdpa` and the source can be obtained from the [official website](http://sdpa.sourceforge.net/download.html). Currently, the latest version is {{page.sdpa_latest_version}}.
+As a backend, we can use either the regular SDPA package, or the SDPA Multiprecision variant. SDPA Multiprecision is a fork of SDPA-GMP.
 
-Sourceforge does not allow a direct download link, however, the specific file required is [sdpa_{{page.sdpa_latest_version}}.tar.gz](https://downloads.sourceforge.net/project/sdpa/sdpa/sdpa_{{page.sdpa_latest_version}}.tar.gz).
+If you choose to use **SDPA Multiprecision**, please follow the instructions in the README of its [GitHub repository](https://github.com/sdpa-python/sdpa-multiprecision), and then skip directly to the [next section](#obtaining-and-installing-sdpa-python-wrapper) on building the Python wrapper.
+
+If you choose to use the **regular SDPA package**, please download it from the [official website](http://sdpa.sourceforge.net/download.html). Currently, the latest version is {{page.sdpa_latest_version}}. Sourceforge does not allow a direct download link, however, the specific file required is [sdpa_{{page.sdpa_latest_version}}.tar.gz](https://downloads.sourceforge.net/project/sdpa/sdpa/sdpa_{{page.sdpa_latest_version}}.tar.gz).
 
 Once downloaded, unzip it using:
 
@@ -92,13 +94,15 @@ This should complete a test run the `sdpa` binary using one of the provided exam
 
 ## Obtaining and installing SDPA Python wrapper
 
-Once you have built and done a test run on `sdpa`, you have a working SDPA binary, it's finally time to build and install `sdpa-python`.
+Once you have built and done a test run on `sdpa` (or `sdpa_gmp` if using the Multiprecision backend), you have a working SDPA binary, it's finally time to build and install `sdpa-python`.
 
 We need SPOOLES for building `sdpa-python`.
 
-### Obtaining SPOOLES library and headers
+### Obtaining and building the SPOOLES library and headers
 
-On macOS we have to download as well as build the SPOOLES library.
+If you are using the **SDPA Multiprecision** backend, it contains SPOOLES and will build it as part of the buildsystem. In that case, you can skip directly to the next subsection.
+
+If you are using the regular SDPA backend, you will have to download as well as build the SPOOLES library.
 
 SPOOLES can be obtained from the official [SPOOLES webpage](http://www.netlib.org/linalg/spooles/spooles.2.2.html) or the [Debian package sources](http://ftp.de.debian.org/debian/pool/main/s/spooles/spooles_2.2.orig.tar.gz).
 
@@ -140,18 +144,17 @@ cd sdpa-python
 There is a file `setupcfg.py` in the root of `sdpa-python`. We need to edit it and provide
 
 
-1. The link to the `make.inc` in the `sdpa` folder (so it can find `libsdpa.a`). Assuming you extracted it on your Desktop:
-
-    Assuming you extracted it on your Desktop:
+1. The location of SDPA headers and static library (i.e. `libsdpa.a` or `libsdpa_gmp.a`):
 
     ```python
-    SDPA_MAKEINC = '/Users/yourusername/Desktop/sdpa-{{page.sdpa_latest_version}}/etc/make.inc'
+    SDPA_DIR = '/path/to/sdpa_package_name'
     ```
 
-2. The location of SPOOLES library and headers. Assuming you extracted it on your Desktop:
+2. Only if using the **regular SDPA** backend, the location of SPOOLES library and headers (for Multiprecision backend these variables need not be changed):
 
     ```python
-    SPOOLES_INCLUDE = '/Users/yourusername/Desktop/spooles/'
+    SPOOLES_DIR = '/path/to/spooles/'
+    SPOOLES_INCLUDE = SPOOLES_DIR
     ```
 
 3. The location of `libgfortran.a` and `libquadmath.a`. Assuming you installed it from [this GitHub repository](https://github.com/fxcoudert/gfortran-for-macOS) with the default options:
@@ -159,6 +162,14 @@ There is a file `setupcfg.py` in the root of `sdpa-python`. We need to edit it a
     ```python
     GFORTRAN_LIBS ='/usr/local/gfortran/lib'
     ```
+
+4. Only if using the **SDPA Multiprecision** backend, the location of GMP library and headers:
+
+    ```python
+    GMP_DIR = '/path/to/gmp-version'
+    ```
+
+5. Lastly, if you are using the **SDPA Multiprecision** backend, please set `USEGMP = True` in this file.
 
 ### Install `sdpa-python` Package
 
