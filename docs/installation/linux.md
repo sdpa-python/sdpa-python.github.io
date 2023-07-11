@@ -2,7 +2,7 @@
 layout: default
 title: Building on Linux
 parent: Installation
-sdpa_latest_version: 7.3.16
+sdpa_latest_version: 7.3.17
 # mumps_url: http://mumps.enseeiht.fr
 mumps_url: https://mumps-solver.org
 ---
@@ -17,7 +17,13 @@ As a backend, we can use either the regular SDPA package, or the SDPA Multipreci
 
 If you choose to use **SDPA Multiprecision**, please follow the instructions in the README of its [GitHub repository](https://github.com/sdpa-python/sdpa-multiprecision), and then skip directly to the [next section](#obtaining-and-installing-sdpa-python-wrapper) on building the Python wrapper.
 
-If you choose to use the **regular SDPA package**, please download it from the [official website](http://sdpa.sourceforge.net/download.html). Currently, the latest version is {{page.sdpa_latest_version}}. Sourceforge does not allow a direct download link, however, the specific file required is [sdpa_{{page.sdpa_latest_version}}.tar.gz](https://downloads.sourceforge.net/project/sdpa/sdpa/sdpa_{{page.sdpa_latest_version}}.tar.gz).
+If you choose to use the **regular SDPA package**, we will download it from the [official website](http://sdpa.sourceforge.net/download.html). Currently, the latest version is {{page.sdpa_latest_version}}.
+
+Sourceforge download links involve redirects. If you are using `wget`, it automatically redirects, however, if you are using `curl`, you have to add `-L` flag to enable redirects:
+
+```bash
+curl -L -O https://downloads.sourceforge.net/project/sdpa/sdpa/sdpa_{{page.sdpa_latest_version}}.tar.gz
+```
 
 Once downloaded, unzip it using:
 
