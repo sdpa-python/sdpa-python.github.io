@@ -20,7 +20,7 @@ The details of the parameters are as below:
 | Parameter | Description | Default |
 |-----------|-------------|---------|
 | `maxIteration` | The maximum number of iterations. | `100` |
-| `epsilonStar` | The accuracy of an approximate optimal solution for primal and dual SDP. | `1.0E-7` |
+| `epsilonStar` | The accuracy of an approximate optimal solution for primal and dual SDP. **If using the multiprecision backend, this parameter may be reduced by orders of magnitude to achieve extended precision.** | `1.0E-7` |
 | `lambdaStar` | An initial point. | `1.0E2` |
 | `omegaStar` | The search region for an optimal solution. | `2.0` |
 | `lowerBound` | Lower bound of the minimum objective value of the primal SDP. | `-1.0E5` |
@@ -28,7 +28,7 @@ The details of the parameters are as below:
 | `betaStar` | The parameter for controlling the search direction if the current point is feasible. | `0.1` |
 | `betaBar` | The parameter for controlling the search direction if the current point is infeasible. | `0.2` |
 | `gammaStar` | A reduction factor for the primal and dual step lengths. | `0.9` |
-| `epsilonDash` | The relative accuracy of an approximate optimal solution between primal and dual SDP. | `1.0E-7` |
+| `epsilonDash` | The relative accuracy of an approximate optimal solution between primal and dual SDP. **If using the multiprecision backend, this parameter may be reduced by orders of magnitude to achieve extended precision.** | `1.0E-7` |
 | `isSymmetric` | Specify whether to check the symmetricity of input matrices. | `False` |
 | `isDimacs` | Specify whether to compute DIMACS ERROR. | `False` |
 | `numThreads` | Number of Threads for internal computation. | `multiprocessing.cpu_count()` |
@@ -63,7 +63,7 @@ The below options set printing options.
 | `print` | Whether to display solver output to stdout. If set to `'display'`, output is printed and if set to `'no'` or empty, no message is print out. | `'display'` |
 | `resultFile` | Destination of detail file output. | `''` |
 | `sdpaResult` | Destination of file output for SDPA result. | `''` |
-| `xPrint` | Format specifier for `yMat` printed to the file. See [this reference page](https://www.cplusplus.com/reference/cstdio/fprintf/) to set it. `NOPRINT` skips printout. | `'%+8.3e'` |
-| `yPrint` | Format specifier for `xVec` printed to the file. See [this reference page](https://www.cplusplus.com/reference/cstdio/fprintf/) to set it. `NOPRINT` skips printout. | `'%+8.3e'` |
-| `sPrint` | Format specifier for `xMat` printed to the file. See [this reference page](https://www.cplusplus.com/reference/cstdio/fprintf/) to set it. `NOPRINT` skips printout. | `'%+8.3e'` |
-| `infPrint` | Format specifier for problem information printed to the file. See [this reference page](https://www.cplusplus.com/reference/cstdio/fprintf/) to set it. `NOPRINT` skips printout. | `'%+10.16e'` |
+| `xPrint` | Format specifier for `yMat` printed to the file. To adjust, see [`fprintf` documentation](https://www.cplusplus.com/reference/cstdio/fprintf/) (for regular backend) or [`gmp_printf` documentation](https://gmplib.org/manual/Formatted-Output-Strings) (for multiprecision backend). `NOPRINT` skips printout. | `'%+8.3e'` (regular backend), `'%+18.12Fe'` (multiprecision backend) |
+| `yPrint` | Format specifier for `yMat` printed to the file. To adjust, see [`fprintf` documentation](https://www.cplusplus.com/reference/cstdio/fprintf/) (for regular backend) or [`gmp_printf` documentation](https://gmplib.org/manual/Formatted-Output-Strings) (for multiprecision backend). `NOPRINT` skips printout. | `'%+8.3e'` (regular backend), `'%+18.12Fe'` (multiprecision backend) |
+| `sPrint` | Format specifier for `yMat` printed to the file. To adjust, see [`fprintf` documentation](https://www.cplusplus.com/reference/cstdio/fprintf/) (for regular backend) or [`gmp_printf` documentation](https://gmplib.org/manual/Formatted-Output-Strings) (for multiprecision backend). `NOPRINT` skips printout. | `'%+8.3e'` (regular backend), `'%+18.12Fe'` (multiprecision backend) |
+| `infPrint` | Format specifier for problem information printed to the file. See [`fprintf` documentation](https://www.cplusplus.com/reference/cstdio/fprintf/) to set it. `NOPRINT` skips printout. | `'%+10.16e'` |
