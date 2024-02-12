@@ -48,7 +48,7 @@ where `J.f` and `K.s` represents the data format of the corresponding cones $$\m
 
 As seen above, the problem data is read into Python variables `A`, `b`, `c`, `K` and `J`.
 
-`A`, `b` and `c` may be defined as `numpy.matrix` or `scipy.matrix` objects.
+`A`, `b` and `c` may be defined as `numpy.ndarray` or one of the sparse array formats (e.g. `csr_array` or `csc_array`) in `scipy.sparse`.
 
 `K` and `J` are `SymCone` objects, a data structure provided in `sdpa-python`. They can be initialized using `K = sdpap.SymCone()` and `J = sdpap.SymCone()` respectively. We need to set their parameters according to the problem.
 
@@ -141,21 +141,21 @@ Now, we can define and solve the sample CLP given in the beginning of this secti
 
 ```python
 import sdpap
-from scipy import matrix
+import numpy as np
 
-A = matrix([
+A = np.array([
     [10, 4, 4, 0],
     [0, 0, 0, -8],
     [0, -8, -8, -2]    
 ])
 
-b = matrix([
+b = np.array([
     [48],
     [-8],
     [20]
 ])
 
-c = matrix([
+c = np.array([
     [-11],
     [0],
     [0],
