@@ -116,14 +116,14 @@ SPOOLES can be obtained from the official [SPOOLES webpage](http://www.netlib.or
 curl -O http://ftp.de.debian.org/debian/pool/main/s/spooles/spooles_2.2.orig.tar.gz
 mkdir spooles
 tar -zxf spooles_2.2.orig.tar.gz -C spooles
+cd spooles
 ```
 
-Open `Make.inc` (located in the root of the extracted `spooles` folder) in a text editor and remove the line `CC = /usr/lang-4.0/bin/cc`. This will let it use the default compiler on your system (otherwise it will throw an error).
-
-To build it, cd to the directory where you extracted SPOOLES and do `make lib`.
+The `Make.inc` file (located in the root of the extracted `spooles` folder) needs to be patched before SPOOLES can be successfully built. Patch and build the library as below.
 
 ```bash
-cd spooles
+curl -O https://raw.githubusercontent.com/sdpa-python/sdpa-multiprecision/main/spooles/patches/patch-Make.inc
+patch -p0 < patch-Make.inc
 make lib
 ```
 
