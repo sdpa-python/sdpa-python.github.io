@@ -29,6 +29,7 @@ The details of the parameters are as below:
 | `betaBar` | The parameter for controlling the search direction if the current point is infeasible. | `0.2` |
 | `gammaStar` | A reduction factor for the primal and dual step lengths. | `0.9` |
 | `epsilonDash` | The relative accuracy of an approximate optimal solution between primal and dual SDP. **If using the multiprecision backend, this parameter may be reduced by orders of magnitude to achieve extended precision.** | `1.0E-7` |
+| `mpfPrecision` | Numerical precision used by the MPF class provided by the GNU Multiprecision Library. **This is only available on the multiprecision variant, and will be ignored by the regular variant.** | `200` |
 | `isSymmetric` | Specify whether to check the symmetricity of input matrices. | `False` |
 | `isDimacs` | Specify whether to compute DIMACS ERROR. | `False` |
 | `numThreads` | Number of Threads for internal computation. | `multiprocessing.cpu_count()` |
