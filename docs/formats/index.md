@@ -10,7 +10,7 @@ nav_order: 3
 We briefly discuss the file formats for storing SDP problems. Most SDP solvers were developed in the late 1990s, which is when these formats were specified.
 
 {: .attention }
-This section is an optional read if you want to use SDPA for Python. For quick start, please see the [Usage](https://sdpa-python.github.io/docs/usage/) section.
+This section is an optional read if you want to use SDPA for Python. For quick start, please see the [Usage](docs/usage/) section.
 
 {: .warning }
 *SDPA for Python* solves an problem in a different standard form than *SDPA*. Below, when we say SDPA, we mean the backend software used by SDPA for Python. SDPA for Python, can however read problems stored in SDPA sparse format.

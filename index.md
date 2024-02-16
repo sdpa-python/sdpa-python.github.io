@@ -17,7 +17,7 @@ Interior-point SDP solver for Python
 
 ---
 
-SDPA for Python (`sdpa-python`) is a Python 3 wrapper for SDPA (SemiDefinite Programming Algorithm). SDPA is a software package for solving general SDPs based on primal-dual interior-point methods with the HRVW/KSH/M search direction [1].
+SDPA for Python is a Python 3 wrapper for SDPA (SemiDefinite Programming Algorithm). SDPA is a software package for solving general SDPs based on primal-dual interior-point methods with the HRVW/KSH/M search direction [1].
 
 This package is a fork of SDPAP, the Python interface for SDPA provided at the [official SDPA website](http://sdpa.sourceforge.net/download.html). This repository aims to provide Python 3 support for both SDPA and [SDPA Multiprecision](https://github.com/sdpa-python/sdpa-multiprecision) (fork of SDPA-GMP [4]).
 
@@ -37,11 +37,11 @@ The package using the SDPA Multiprecision (GMP) backend can be installed by
 pip install sdpa-multiprecision
 ```
 
-PyPI currently does not have wheels for Apple M1 but it can built from source. Please see the instructions in the [Installation](https://sdpa-python.github.io/docs/installation/) section.
+For supported platforms, please see the [Installation](docs/installation/) section.
 
 ### Usage
 
-To get started, see the [Usage](https://sdpa-python.github.io/docs/usage/) section.
+To get started, see the [Usage](docs/usage/) section.
 
 ## History
 
