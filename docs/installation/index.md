@@ -20,5 +20,5 @@ pip install sdpa-multiprecision
 ```
 
 {: .attention }
-**Apple Silicon**
-`sdpa-multiprecision` wheels are available for Apple Silicon. The regular variant is currently only installable from source (instructions below). Due to a lack of a Fortran cross compiler, we are not able to provide macOS `arm64` wheels for the regular variant.
+**Macs with Apple Silicon**
+`sdpa-multiprecision` wheels are available for ARM based Macs. The regular variant is currently only installable from source (instructions below). Due to a lack of a Fortran cross compiler, we are not able to provide macOS `arm64` wheels for the regular variant.
