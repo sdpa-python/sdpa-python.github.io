@@ -2,7 +2,7 @@
 layout: default
 title: Building on Windows
 parent: Installation
-sdpa_latest_version: 7.3.17
+sdpa_latest_version: 7.3.18
 # mumps_url: http://mumps.enseeiht.fr
 mumps_url: https://mumps-solver.org
 ---
