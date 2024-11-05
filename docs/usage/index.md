@@ -104,7 +104,7 @@ We have three inequality constraints. Thus, `J.l = 3`.
 ​
 ## $$s\colon$$ SDP Cones
 
-The cone with subscript $$s$$ represents the SDP cones. One SOCP cone is defined as the set
+The cone with subscript $$s$$ represents the SDP cones. One SDP cone is defined as the set
 
 $$
 \left\{\boldsymbol{x}_{s}: \text{vec}^{-1}(\boldsymbol{x}_{s})\succeq_{S_{+}} \mathbf{0}\right\}
