@@ -13,6 +13,9 @@ whitelist:
   - jekyll-include-cache
 
 callouts:
+  success:
+    color: green
+
   attention:
     color: blue
 

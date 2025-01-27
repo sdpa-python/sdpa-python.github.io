@@ -19,6 +19,10 @@ The package using the [SDPA Multiprecision](https://github.com/sdpa-python/sdpa-
 pip install sdpa-multiprecision
 ```
 
-{: .attention }
+{: .success }
 **Macs with Apple Silicon**
-`sdpa-multiprecision` wheels are available for ARM based Macs. The regular variant is currently only installable from source (instructions below). Due to a lack of a Fortran cross compiler, we are not able to provide macOS `arm64` wheels for the regular variant.
+Both `sdpa-python` and `sdpa-multiprecision` wheels are now available for ARM based Macs.
+
+{: .attention }
+**`sdpa-python` on macOS**
+`sdpa-python` wheels are built for minimum macOS versions of 13 and 14 (for Intel and ARM respectively). If you cannot install version 0.2.2, please run `pip install --upgrade pip setuptools wheel` before installing `sdpa-python`.
