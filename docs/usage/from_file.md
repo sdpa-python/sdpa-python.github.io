@@ -25,10 +25,8 @@ The below example shows how to read and solve an SDPA sparse formatted file (i.e
 ```python
 import sdpap
 
-A, b, c, K, J = sdpap.fromsdpa('mcp500-3.dat-s')
-x, y, sdpapinfo, timeinfo, sdpainfo = sdpap.solve(-A,-b,-c,K,J)
+A, b, c, K, J = sdpap.importsdpa('mcp500-3.dat-s')
+x, y, sdpapinfo, timeinfo, sdpainfo = sdpap.solve(A,b,c,K,J)
 ```
-
-The sign flipping is a consequence of the [inverse relationship]({% link docs/formats/sdpa_sedumi.md %}) between SDPA and SeDuMi formats (and that the (CLP) format used by SDPA for Python is a generalization of the SeDuMi format).
 
 SDPLIB is a database of problems in SDPA sparse format. It's available as a [GitHub repository](https://github.com/vsdp/SDPLIB).
