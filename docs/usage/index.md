@@ -233,4 +233,4 @@ retrievingTime = 0.000002
 ---------- SDPAP End ----------
 ```
 
-The information printed in the `Result` section of the output log will be returned in the dictionary `sdpainfo`. The dictionary `sdpapinfo` will contain a subset of this information.
+The dictionary `sdpainfo` will contain the output of the backend solver. The dictionary `sdpapinfo` will contain the output of SDPA for Python (for the original CLP).
