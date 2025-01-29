@@ -121,6 +121,6 @@ The SeDuMi form is the special case of the above in which the cone `J` is the ze
 
 Internally, this Python wrapper will check if `J` is the zero cone. If it's not, it will transform the other variables such that `J` becomes the zero cone. Internally, SDPA always solves the problem in SeDuMi format.
 
-After reading the problem data from a CLP file, and before calling the SDPA solver code, this wrapper will convert the CLP format into SeDuMi dual ($$\mathcal{D}$$) problem format using a function named `clp_toLMI`. This conversion involves getting rid of `J` to comply with the SeDuMi format (the structures `A`, `b`, `c` and `K` are adjusted accordingly). 
+After reading the problem data from a CLP file, and before calling the SDPA solver code, this wrapper will convert the CLP format into SeDuMi dual ($$\mathcal{D}$$) problem format using a function named `clp_toLMI`. This conversion involves conversion of `J` to comply with the SeDuMi format (the structures `A`, `b`, `c` and `K` are adjusted accordingly). 
 
 An unimplemented function `clp_toEQ` is present in the code which is meant to convert CLP format to SeDuMi primal ($$\mathcal{P}$$) problem format. It's not yet implemented, but we hope to fix that soon.
