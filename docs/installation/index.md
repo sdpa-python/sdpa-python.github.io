@@ -24,5 +24,5 @@ pip install sdpa-multiprecision
 Both `sdpa-python` and `sdpa-multiprecision` wheels are now available for ARM based Macs.
 
 {: .attention }
-**`sdpa-python` on macOS**
-`sdpa-python` wheels are built for minimum macOS versions of 13 and 14 (for Intel and ARM respectively). If you cannot install version 0.2.2, please run `pip install --upgrade pip setuptools wheel` before installing `sdpa-python`.
+**macOS Users**
+The regular variant (i.e. `sdpa-python` wheels) are built for minimum macOS versions of 13 and 14 (for Intel and ARM respectively). If you cannot install version 0.2.2, please run `pip install --upgrade pip setuptools wheel` before installing `sdpa-python`.
