@@ -39,6 +39,8 @@ pip install sdpa-multiprecision
 
 For supported platforms, please see the [Installation](docs/installation/) section.
 
+If this project is useful for your work, please consider leaving a star on the relevant GitHub repository: [SDPA for Python](https://github.com/sdpa-python/sdpa-python) and/or [SDPA Multiprecision](https://github.com/sdpa-python/sdpa-multiprecision)
+
 ### Usage
 
 To get started, see the [Usage](docs/usage/) section.

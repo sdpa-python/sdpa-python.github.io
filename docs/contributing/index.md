@@ -7,18 +7,25 @@ nav_order: 5
 
 # Contributing
 
-Below is a non-exhaustive list of opportunities for contributing to the development of SDPA for Python.
+SDPA for Python is a fork of SDPAP, SDPA's official Python wrapper. SDPA Multiprecision is a fork of SDPA-GMP, and adds an Application Binary Interface to allow its usage as a callable library. This project is an effort to maintain both for the Python ecosystem. Below is a non-exhaustive list of opportunities for contributing to one or other other.
 
-### Small scope projects
+### Common projects
 
-1. Improving this documentation.
-2. Writing unit tests/benchmarks.
+1. You can help by improving this documentation website.
+2. Since building from source requires compiling multiple libraries, sometimes issues may arise during compilation in some environments which otherwise do not show up in the CI infrastructure (the Python wheels are built on GitHub runners). If you run into problems building from source, please open an issue in the relevant GitHub repository so it can be investigated.
 
-### Medium scope projects
+### SDPA for Python (SDPAP) specific projects
 
-1. Implementation of `clp_toEQ` and `result_fromEQ` routines in [convert.py](https://github.com/sdpa-python/sdpa-python/blob/main/sdpap/convert.py) to allow user to choose SeDuMi Primal format as the internal representation of the problem (i.e. allow user to set `convMethod` to `EQ` in the solver options). Currently only `clp_toLMI` and `result_fromLMI` are present which convert the problem to SeDuMi Dual format.
-2. Implementation of domain and range space conversion method using clique trees (i.e. `rconv_cliquetree`, `rconv_cliqueresult`, `dconv_cliquetree` and `dconv_cliqueresult` in [spcolo.py](https://github.com/sdpa-python/sdpa-python/blob/main/sdpap/spcolo/spcolo.py)
+SDPAP contains (Python translations of) some routines from [SparseCoLO](https://github.com/sdpa-python/SparseCoLO) [1] to provide a more general API than SDPA, and also to exploit sparsity in nonlinear matrix inequalities. Currently only a subset of these routines are present in SDPA for Python. If you can help translate other routines, that can extend the abilities of SDPA for Python. The [Solver Options]({% link docs/usage/params.md %}) contains more information on the unimplemented routines.
 
-### Large scope projects
+### SDPA Multiprecision specific projects
 
-1. Add support for SOCP constraints to make the package a complete SQLP solver. This is a contribution to SDPA (and not just SDPA for Python).
+SDPA Multiprecision uses MPACK, a multiprecision version of BLAS/LAPACK based on the GNU Multiprecision Library. In future, this may be migrated to use [MPLAPACK](https://github.com/nakatamaho/mplapack). Any effort to this end will be appreciated.
+
+### Testing
+
+A GitHub Actions pipeline is setup to automatically test the Python code using CVXPY tests (using both SDPA and SDPA Multiprecision backends). Additional tests may be added under the `tests` folder to test features not otherwise tested by CVXPY tests.
+
+If you want to contribute to SDPA for Python, you can use SparseCoLO as a reference.
+
+[1] Sunyoung Kim, Masakazu Kojima, Martin Mevissen and Makoto Yamashita, "Exploiting sparsity in linear and nonlinear matrix inequalities via positive semidefinite matrix completion," Mathematical Programming, 129(1), 33–68. doi: [10.1007/s10107-010-0402-6](https://doi.org/10.1007/s10107-010-0402-6)
