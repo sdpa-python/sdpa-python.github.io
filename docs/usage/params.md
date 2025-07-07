@@ -21,10 +21,10 @@ The details of the parameters are as below:
 |-----------|-------------|---------|
 | `maxIteration` | The maximum number of iterations. | `100` |
 | `epsilonStar` | The accuracy of an approximate optimal solution for primal and dual SDP. **If using the multiprecision backend, this parameter may be reduced by orders of magnitude to achieve extended precision.** | `1.0E-7` |
-| `lambdaStar` | An initial point. | `1.0E2` |
-| `omegaStar` | The search region for an optimal solution. | `2.0` |
-| `lowerBound` | Lower bound of the minimum objective value of the primal SDP. | `-1.0E5` |
-| `upperBound` | Upper bound of the maximum objective value of the dual SDP. | `1.0E5` |
+| `lambdaStar` | Sets $$\lambda$$ for the initial point, which is then determined as: $$x^0 = 0, X^0 = \lambda I, Y^0 = \lambda I$$. A large $$\lambda$$ is recommended. | `1.0E2` |
+| `omegaStar` | The search region for an optimal solution. Precisely, the algorithm will terminate if the primal problem has no minimum solution in the region $$\mathcal{O} \preceq X \preceq \omega X^0$$ or if the dual problem has no maximum solution in the region $$\mathcal{O} \preceq Y \preceq \omega Y^0$$. A small $$\omega > 1$$ is recommended. | `2.0` |
+| `lowerBound` | Lower bound of the minimum objective value of the primal SDP. **The solver will terminate with unbounded status once the objective crosses this value. This bound should be relaxed if the objective is known to be below this value.** | `-1.0E5` |
+| `upperBound` | Upper bound of the maximum objective value of the dual SDP. **The solver will terminate with unbounded status once the objective crosses this value. This bound should be relaxed if the objective is known to be above this value.** | `1.0E5` |
 | `betaStar` | The parameter for controlling the search direction if the current point is feasible. | `0.1` |
 | `betaBar` | The parameter for controlling the search direction if the current point is infeasible. | `0.2` |
 | `gammaStar` | A reduction factor for the primal and dual step lengths. | `0.9` |
